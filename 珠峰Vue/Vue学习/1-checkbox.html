@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>checkbox</title>
+</head>
+<body>
+    <div id="app">
+        <input type="checkbox" id="check" v-model="checkAll"><label for="check">全选</label>
+        <hr>
+        <div class="check">
+            <div v-for="(item,index) of checkArr">
+                <input type="checkbox" :id="'check' + index" v-model="item.isCheck">
+                <label :for="'check' + index">多选 {{index}}</label>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                checkElem: false,
+                checkArr: [{isCheck: false},{isCheck: false},{isCheck: false},{isCheck: false},{isCheck: false}]
+            },
+            computed: {
+                checkAll:{
+                    get(){
+                        return this.checkArr.every((item) => item.isCheck );
+                    },
+                    set(val){
+                        console.log(val);
+                        this.checkArr.forEach((item,index) => item.isCheck = val );
+                    }
+                }
+            },
+        })
+    </script>
+</body>
+</html>
