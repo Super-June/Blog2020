@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全局组件</title>
+</head>
+<body>
+    <div id="app">
+		<item-demo :tit="title" :arrs="arrLists"></item-demo>
+	</div>
+	
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		/* 
+			全局组件：
+			一般写插件的时候全局组件使用的多一些
+			用法：全局组件可以声明在任何地方
+				  局部组件必须告诉属于谁
+		*/
+		Vue.component("item-demo",{
+			props: ["tit","arrs"],
+			template: `
+			<div class="wrap">
+				<h4>{{title}}</h4>
+				<ul>
+					<li v-for="(item,index) of arrs">{{index}} - {{item}}</li>
+				</ul>
+			</div>
+			`,
+			data(){
+				return {
+					title: this.tit
+				}	
+			}
+		})
+		
+		let vm = new Vue({
+			el: "#app",
+			data: {
+				title: "我是一个标题",
+				arrLists: ["组件循环一","组件循环二","组件循环三"]
+			}
+		})
+	</script>
+</body>
+</html>

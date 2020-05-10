@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生命钩子</title>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+        /* 生命周期:
+            beforeCreate created
+            beforeMount mounted
+            beforeUpdate updated
+            beforeDestroy Destroyed
+        */
+        let vm = new Vue({ //根实例，初始化时会调用很多方法（钩子函数）
+            data: {
+                message: "我是一条信息"
+            },
+            //4、如果有template属性会用模板替换掉外部的html(#app)
+            template: "<div>{{message}}</div>",
+            beforeCreate() {
+                //1、此方法用不到
+                console.log("beforeCreate");
+            },
+            created() {
+                //2、一般用来获取ajax，初始化操作
+                console.log("created");
+            },
+            beforeMount() {
+                // 没啥实际意义 (渲染模板、挂载节点前)
+                console.log("beforeMount");
+            },
+            mounted() {
+                // 真实dom渲染完了，可以操作dom了
+                console.log("mounted");
+            },
+            beforeUpdate() { //一般用watch替换掉
+                // 更新数据前
+                console.log("beforeUpdate");
+            },
+            updated() {
+                // 更新数据后
+                console.log("updated");
+            },
+            beforeDestroy() {
+                // 销毁前 (可以清除定时器 或者 清除事件绑定)
+                console.log("beforeDestroy");
+            },
+            destroyed() {
+                // 销毁后
+                console.log("destroyed");
+            }
+        });
+        vm.$mount("#app"); //3、要保证有编译的元素
+    </script>
+</body>
+</html>

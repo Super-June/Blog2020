@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实例上的方法</title>
+</head>
+<body>
+    <div id="app">
+		<div ref="wrap">
+			<p v-for="(item,index) of arrList" ref="pLabel">我是p标签 {{item}}</p>
+		</div>
+		
+	</div>
+
+    <script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		/*
+			部分方法：
+			this.$data	vm上的数据
+			this.$watch 监控
+			this.$el	当前el元素
+			this.$set	后加的属性实现响应式变化
+			this.$options	vm上的所有属性
+			this.$nextTick(()=>{})	//异步的方法，等待渲染dom完成后获取vm
+			this.$refs
+		*/
+		let vm = new Vue({
+			el: "#app",
+			data: {
+				message: "我是一条信息",
+				arrList: ["第一条","第二条","第三条"]
+			},
+			mounted(){
+				//如果dom元素不是通过v-for循环出来的，只能获取到一个，通过v-for循环出来的可以获取多个
+				console.log(this.$refs.pLabel);
+
+				this.arrList.push("第四条"); //dom渲染数异步的
+				
+				this.$nextTick(()=>{ //如果数据发生变化后想要获取真实dom中的内容，需要等待页面渲染完毕后去获取，所有的dom操作 最好在nextTiclk中
+					console.log(this.$refs.wrap.children);
+				})
+			}
+		})
+	</script>
+</body>
+</html>
