@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>子组件传父组件</title>
+</head>
+<body>
+    <div id="app">
+        <p>父亲：{{money}}</p>
+        <!-- <div><p>儿子：{{money}}</p><button>🐶给我钱🐶</button></div> -->
+        <item-demo :mon="money" @addmoney="changeAdd"></item-demo>
+	</div>
+
+    <script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		// 父亲绑定一些事件，儿子触发这个事件 将参数传递过去 单项数据流，父亲数据刷新 儿子就刷新
+		let vm = new Vue({
+			el: "#app",
+			data: {
+				money: 400
+            },
+            methods: {
+                changeAdd(val){
+                    this.money = val;
+                }
+            },
+            components: {
+                "item-demo": {
+                    props: ["mon"],
+                    template: `<div><p>儿子：{{mon}}</p><button @click="emitClick">🐶给我钱🐶</button></div>`,
+                    methods: {
+                        emitClick(){
+                            this.$emit("addmoney", 800);
+                        }
+                    }
+                }
+            }
+		})
+	</script>
+</body>
+</html>

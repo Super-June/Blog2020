@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非父子组件传值(Bus/总线/发布订阅模式/观察者模式)</title>
+</head>
+<body>
+    <div id="app">
+		<item-demo content="Dell"></item-demo>
+		<item-demo content="Lee"></item-demo>
+	</div>
+
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+		Vue.prototype.bus = new Vue();
+		Vue.component("item-demo",{
+			props: {
+				content: String
+			},
+			template: `<div @click="headelClick">{{cont}}</div>`,
+			data(){
+				return {
+					cont: this.content
+				}
+			},
+			// 渲染完（生命钩子）
+			mounted() {
+				this.bus.$on("change",(msg)=>{
+					this.cont = msg;
+				})
+			},
+			methods:{
+				headelClick(){
+					this.bus.$emit("change", this.cont);
+				}
+			}
+		})
+        let vm = new Vue({
+			el: "#app"
+		})
+    </script>
+</body>
+</html>

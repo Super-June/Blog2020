@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>props验证</title>
+</head>
+<body>
+    <div id="app">
+		<p>{{message}}</p>
+		<item-demo :msg="message" :arrlist="ArrLists"></item-demo>
+	</div>
+
+    <script src="../node_modules/vue/dist/vue.js"></script>
+	<script>
+		Vue.component("item-demo",{
+			props: {
+				msg: {
+					/*
+						props特性：有props接收
+						非props特性：没有props接收，比如 msg没接收，那它会保留到组件根节点上
+					*/
+                    // 基础的类型检查 (`null` 和 `undefined` 会通过任何类型验证)
+					type: String, //可以检查多个用 数组 方式
+					default: "props默认值", //设置默认值
+					required: true, // 设置必填项 
+					validator(val){ //自定义验证函数
+						console.log(val);
+						return ["我是一条信息","我不是一条信息"].indexOf(val) != -1;
+					}
+				},
+				arrlist: {
+					type: [Array,String]
+				}
+			},
+			template: `<div>
+				<div @click="headeClick">{{msgTemp}}</div>
+				<ul>
+					<li v-for="(item,index) of arrTemp">{{index}} - {{item}}</li>
+				</ul>
+			</div>`,
+			data(){
+				return {
+					msgTemp: this.msg,
+					arrTemp: this.arrlist
+				}
+			},
+			methods: {
+				headeClick(){
+					this.msgTemp = "我修改了"
+				}
+			}
+		})
+
+		let vm = new Vue({
+			el: "#app",
+			data: {
+				message: "我是一条信息",
+				ArrLists: ["第一个数组","第二个数组","第三个数组"]
+			}
+		})
+	</script>
+</body>
+</html>
