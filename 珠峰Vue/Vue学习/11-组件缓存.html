@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件缓存</title>
+</head>
+<body>
+    <div id="app">
+		<input type="radio" v-model="rvalue" value="tempO" />One
+		<input type="radio" v-model="rvalue" value="tempT" />Two
+		<!-- 一般用作缓存：为的是后面的路由做准备，如果缓存了就不会再走created mounted钩子函数 -->
+		<keep-alive>
+			<component :is="rvalue"></component>
+		</keep-alive>
+	</div>
+	
+	<script src="../node_modules/vue/dist/vue.js"></script>
+	<script type="text/javascript">
+		let tempO = {
+			template: `<div>我是第一个组件！！！</div>`,
+			mounted(){
+				alert("挂载");
+			},
+			beforeDestroy(){
+				alert("销毁");
+			}
+		}
+		let tempT = {
+			template: `<div>我是第二个组件！！！</div>`,
+			mounted(){
+				alert("挂载");
+			},
+			beforeDestroy(){
+				alert("销毁");
+			}
+		}
+		let vm = new Vue({
+			el: "#app",
+			data: {
+				rvalue: "tempO"
+			},
+			components: {
+				tempO,tempT
+			}
+		})
+	</script>
+</body>
+</html>

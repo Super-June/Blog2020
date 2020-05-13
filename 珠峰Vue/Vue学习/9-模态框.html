@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模态框</title>
+    <style>
+        .popups{
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            width: 400px;
+            height: 400px;
+            background-color: #ccc;
+        }
+		.fade-enter-active, .fade-leave-active {
+		    transition: opacity .5s;
+		}
+		.fade-enter, .fade-leave-to{
+		    opacity: 0;
+		}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <button @click="handerclick">打开弹窗</button>
+		<transition name="fade">
+			<item-demo :pop.sync="popup" v-show="popup"></item-demo>
+		</transition>
+        
+    </div>
+
+    <template id="tempdemo">
+        <div class="popups">
+            <button @click="downClick">关闭弹窗</button>
+            <p>我是一个弹窗</p>
+        </div>
+    </template>
+
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+        let itemdemo = {
+            props: ["pop"],
+            template: "#tempdemo",
+			methods: {
+				downClick(){
+					this.$emit("update:pop", false);
+				}
+			}
+        }
+        let vm = new Vue({
+            el: "#app",
+            data: {
+                popup: false
+            },
+            methods: {
+                handerclick(){
+					this.popup = true;
+                }
+            },
+            components: {
+                "item-demo": itemdemo
+            }
+        })
+    </script>
+</body>
+</html>

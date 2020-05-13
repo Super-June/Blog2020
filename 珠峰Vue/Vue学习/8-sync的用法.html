@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sync的用法</title>
+</head>
+<body>
+	<div id="app">
+        <div>{{message}}</div>
+        <!-- <item-demo :msg="message" @expclick="exposedClick"></item-demo> -->
+        <item-demo :msg.sync="message" ></item-demo>
+    </div>
+	
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+        /*
+            sync 简化子组件向父组件传值
+        */
+        let vm = new Vue({
+            el: "#app",
+            data: {
+                message: '我是一条信息'
+            },
+            methods:{
+                // exposedClick(val){
+                //     console.log(val);
+                //     this.message = val;
+                // }
+            },
+            components: {
+                "item-demo": {
+                    props: ["msg"],
+                    template: `<div>
+                        <div>组件：{{msgs}}</div>
+                        <button @click="handerClick">点击改变</button>
+                    </div>`,
+                    data(){
+                        return {
+                            msgs: this.msg
+                        }
+                    },
+                    methods: {
+                        handerClick(){
+                            this.msgs = "我是组件的一条信息"
+                            // this.$emit("expclick", this.msgs);
+                            this.$emit("update:msg", this.msgs);
+                        }
+                    },
+                }
+            }
+        })
+    </script>
+</body>
+</html>
