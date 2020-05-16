@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eventBus</title>
+</head>
+<body>
+    <div id="app">
+        <brother1></brother1>
+        <brother2></brother2>
+    </div>
+
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script>
+        // Vue.prototype.bus = new Vue();
+        let EventBus = new Vue();
+
+        let brother1 = {
+            template: `<div> {{color}} <button @click="handleClick">变绿</button></div>`,
+            data(){
+                return {color: "绿色", old: "绿色"}
+            },
+            mounted(){
+                this.$nextTick(()=>{
+                    EventBus.$on("greenClick",(color)=>{
+                        this.color = color;
+                    })
+                })
+            },
+            methods: {
+                handleClick(){
+                    EventBus.$emit("redClick",this.old);
+                }
+            }
+        }
+        let brother2 = {
+            template: `<div> {{color}} <button @click="handleClick">变红</button></div>`,
+            data(){
+                return {color: "红色", old: "红色"}
+            },
+            mounted() {
+                this.$nextTick(()=>{
+                    EventBus.$on("redClick",(color)=>{
+                        this.color = color;
+                    })
+                })
+            },
+            methods: {
+                handleClick(){
+                    EventBus.$emit("greenClick",this.old);
+                }
+            }
+        }
+        let vm = new Vue({
+            el: "#app",
+            components: {
+                brother1,brother2
+            }
+        })
+    </script>
+</body>
+</html>

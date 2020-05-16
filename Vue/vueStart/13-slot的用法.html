@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>slot的用法</title>
+		<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+	</head>
+	<body>
+		<div id="app">
+			<div class="container">
+				<input type="radio" value="primary" v-model="colorName" />primary
+				<input type="radio" value="success" v-model="colorName" />success
+				<input type="radio" value="info" v-model="colorName" />info
+				<input type="radio" value="warning" v-model="colorName" />warning
+				<input type="radio" value="danger" v-model="colorName" />danger
+			</div>
+			<hr>
+			<itemdemo :type="colorName" @say-title="parent">
+				<h4 slot="head">Canvas API</h4>
+				<div class="jumbotron" slot="body">
+					<h1>Hello, world!</h1>
+					<p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content
+						or information.</p>
+				</div>
+				<p class="lead text-center" slot="footer">作者：刘先生</p>
+			</itemdemo>
+		</div>
+
+		<template id="item">
+			<div class="container" :class="[color]">
+				<div class="panel-heading img-responsive" ref="title">
+					<slot name="head"></slot>
+				</div>
+				<div class="panel-body">
+					<slot name="body"></slot>
+				</div>
+				<div class="panel-footer">
+					<slot name="footer">我是不传的默认模板</slot>
+					<p class="text-center"><a class="btn btn-primary btn-lg" href="#" role="button" @click="titleClick">点我说标题</a></p>
+				</div>
+			</div>
+		</template>
+
+		<script src="../node_modules/vue/dist/vue.js"></script>
+		<script type="text/javascript">
+			let itemdemo = {
+				props: {
+					type: {
+						type: [String]
+					}
+				},
+				template: "#item",
+				computed:{
+					color(){
+						return "panel-" + this.type;
+					}
+				},
+				methods:{
+					titleClick(){
+						this.$emit("say-title", this.$refs.title);
+					}
+				}
+			}
+			let vm = new Vue({
+				el: "#app",
+				data:{
+					colorName: "primary"
+				},
+				components: {
+					itemdemo
+				},
+				methods: {
+					parent(tit){
+						alert(tit.innerText);
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

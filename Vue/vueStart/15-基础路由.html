@@ -2,9 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>基础路由</title>
+    <style>
+        .active{color: red;}
+    </style>
 </head>
 <body>
-$END$
+    <!--
+        前后端分离 后端只负责提供接口供前端调用，像跳转都是前端自己处理的
+        hash模式 # 开发时使用hash 不会导致404 hash不支持seo
+        h5的history。pushState（上线采用h5的跳转）
+    -->
+    <div id="app">
+        <h1>Hello App!</h1>
+        <p>
+            <!-- 使用 router-link 组件来导航. -->
+            <!-- 通过传入 `to` 属性指定链接. -->
+            <!-- <router-link> 默认会被渲染成一个 `<a>` 标签 通过tag可以设置想要的标签-->
+            <router-link to="/foo" tag="button">Go to foo</router-link>
+            <router-link to="/bar" tag="button">Go to bar</router-link>
+        </p>
+        <!-- 路由出口 -->
+        <!-- 路由匹配到的组件将渲染在这里 -->
+        <router-view></router-view>
+    </div>
+
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <!--必须放在vue后面-->
+    <script src="../node_modules/vue-router/dist/vue-router.js"></script>
+    <script>
+        // 0. 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
+
+        // 1. 定义 (路由) 组件。
+        // 可以从其他文件 import 进来
+        let Foo = {template: `<div>foo</div>`};
+        let Bar = {template: `<div>bar</div>`};
+
+        // 2. 定义路由
+        // 每个路由应该映射一个组件。 其中"component" 可以是
+        // 通过 Vue.extend() 创建的组件构造器，
+        // 或者，只是一个组件配置对象。
+        let routes = [
+            {path: "/foo", component: Foo},
+            {path: "/bar", component: Bar}
+        ];
+
+        // 3. 创建 router 实例，然后传 `routes` 配置
+        let router = new VueRouter({
+            //mode: "history", //h5模式
+            routes, //相当于 routes: routes
+            linkActiveClass: "active", //更改<router-link>选中的class名
+        });
+
+        // 4. 创建和挂载根实例。
+        // 记得要通过 router 配置参数注入路由，
+        // 从而让整个应用都有路由功能
+        let vm = new Vue({
+            router
+        }).$mount("#app");
+
+    </script>
 </body>
 </html>
